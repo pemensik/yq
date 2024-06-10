@@ -1,5 +1,3 @@
-%{?!python3_pkgversion:%global python3_pkgversion 3}
-
 # OpenSUSE uses alternative Go based tool:
 # https://github.com/mikefarah/yq
 
@@ -17,7 +15,7 @@ Source0:        %pypi_source
 
 BuildArch:      noarch
 
-BuildRequires:  python%{python3_pkgversion}-devel
+BuildRequires:  python3-devel
 BuildRequires:  jq
 
 %global _description %{expand:
@@ -31,13 +29,13 @@ added continuously.}
 %{_description}
 
 
-%package -n python%{python3_pkgversion}-%{srcname}
+%package -n python3-%{srcname}
 Summary:        %{summary}
 %{?python_provide:%python_provide python3-%{srcname}}
 
 Requires:       jq
 
-%description -n python%{python3_pkgversion}-%{srcname}
+%description -n python3-%{srcname}
 %{_description}
 
 
@@ -62,7 +60,7 @@ Requires:       jq
 %{python3} test/test.py
 
 
-%files -n  python%{python3_pkgversion}-%{srcname} -f %{pyproject_files}
+%files -n  python3-%{srcname} -f %{pyproject_files}
 %license LICENSE
 %doc README.rst
 %{_bindir}/%{srcname}
