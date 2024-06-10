@@ -7,7 +7,7 @@
 %global srcforge https://github.com/kislyuk/yq
 
 Name:           python-yq
-Version:        3.2.3
+Version:        3.4.3
 Release:        %autorelease
 Summary:        Command-line YAML/XML processor - jq wrapper for YAML/XML documents
 License:        Apache-2.0
@@ -20,8 +20,15 @@ BuildArch:      noarch
 BuildRequires:  python%{python3_pkgversion}-devel
 BuildRequires:  jq
 
+%global _description %{expand:
+Lightweight and portable command-line YAML, JSON and XML processor.
+yq uses jq like syntax but works with yaml files as well as json, xml,
+properties, csv and tsv. It doesn't yet support everything jq does - but it
+does support the most common operations and functions, and more is being
+added continuously.}
+
 %description
-%{summary}.
+%{_description}
 
 
 %package -n python%{python3_pkgversion}-%{srcname}
@@ -31,7 +38,7 @@ Summary:        %{summary}
 Requires:       jq
 
 %description -n python%{python3_pkgversion}-%{srcname}
-%{summary}.
+%{_description}
 
 
 %prep
