@@ -13,8 +13,7 @@ URL:            https://pypi.org/project/yq/
 VCS:            git:%{srcforge}
 Source0:        %{pypi_source yq}
 
-Patch1:         yq-setuptools-scm-7.1.0.patch
-Patch2:         yq-tomlkit-f39.patch
+Patch1:         yq-tomlkit-f39.patch
 
 BuildArch:      noarch
 
@@ -51,12 +50,15 @@ Requires:       jq
 
 
 %prep
-%autosetup -p1 -n %{srcname}-%{version}
+%autosetup -p1 -n %{srcname}-%{version} -N
 
 %if 0%{?fedora} && 0%{?fedora} <= 39
 # version_file is not supported in setuptools-scm 7.1.0
-sed -e 's/^version_file/write_to/' -i pyproject.toml
+sed -e 's/^version_file/#write_to/' -i pyproject.toml
+%autopatch -M 1 -p1
 %endif
+
+%autopatch -m 2 -p1
 
 %generate_buildrequires
 %pyproject_buildrequires
