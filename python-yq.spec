@@ -14,6 +14,7 @@ VCS:            git:%{srcforge}
 Source0:        %{pypi_source yq}
 
 Patch1:         yq-setuptools-scm-7.1.0.patch
+Patch2:         yq-tomlkit-f39.patch
 
 BuildArch:      noarch
 
