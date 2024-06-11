@@ -65,7 +65,7 @@ Requires:       jq
 %doc README.rst
 %{_bindir}/%{srcname}
 %{_bindir}/tomlq
-%{_bindir}/xq
+%{_bindir}/xqp
 
 
 %changelog
