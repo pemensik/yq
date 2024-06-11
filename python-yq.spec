@@ -1,4 +1,4 @@
-# OpenSUSE uses alternative Go based tool:
+# OpenSUSE uses alternative Go based tool (rhbz#2276522):
 # https://github.com/mikefarah/yq
 
 %global srcname yq
@@ -7,11 +7,11 @@
 Name:           python-yq
 Version:        3.4.3
 Release:        %autorelease
-Summary:        Command-line YAML/XML processor - jq wrapper for YAML/XML documents
+Summary:        Command-line YAML/XML/TOML processor - jq wrapper
 License:        Apache-2.0
 URL:            https://pypi.org/project/yq/
 VCS:            git:%{srcforge}
-Source0:        %pypi_source
+Source0:        %{pypi_source yq}
 
 Patch1:         yq-setuptools-scm-7.1.0.patch
 
@@ -23,12 +23,17 @@ BuildRequires:  jq
 BuildRequires:  sed
 %endif
 
+Requires(post): %{_bindir}/alternatives
+Requires(postun): %{_bindir}/alternatives
+
 %global _description %{expand:
-Lightweight and portable command-line YAML, JSON and XML processor.
-yq uses jq like syntax but works with yaml files as well as json, xml,
-properties, csv and tsv. It doesn't yet support everything jq does - but it
-does support the most common operations and functions, and more is being
-added continuously.}
+jq wrapper for YAML, XML, TOML documents.
+
+yq takes YAML input, converts it to JSON, and pipes it to jq. By
+default, no conversion of jq output is done. yq also supports XML,
+which transcodes XML to JSON using xmltodict and pipes it to jq.
+yq supports TOML as well, which uses the tomlkit library to
+transcode TOML to JSON, then pipes it to jq.}
 
 %description
 %{_description}
