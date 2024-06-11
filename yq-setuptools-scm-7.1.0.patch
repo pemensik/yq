@@ -1,0 +1,10 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index f76dfb4..407b56f 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -23,4 +23,4 @@ module = "yq.version"
+ ignore_missing_imports = true
+ 
+ [tool.setuptools_scm]
+-version_file = "yq/version.py"
++write_to = "yq/version.py"

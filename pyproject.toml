@@ -23,4 +23,4 @@ module = "yq.version"
 ignore_missing_imports = true
 
 [tool.setuptools_scm]
-version_file = "yq/version.py"
+write_to = "yq/version.py"

@@ -13,10 +13,15 @@ URL:            https://pypi.org/project/yq/
 VCS:            git:%{srcforge}
 Source0:        %pypi_source
 
+Patch1:         yq-setuptools-scm-7.1.0.patch
+
 BuildArch:      noarch
 
 BuildRequires:  python3-devel
 BuildRequires:  jq
+%if 0%{?fedora} && 0%{?fedora} <= 39
+BuildRequires:  sed
+%endif
 
 %global _description %{expand:
 Lightweight and portable command-line YAML, JSON and XML processor.
@@ -41,6 +46,11 @@ Requires:       jq
 
 %prep
 %autosetup -p1 -n %{srcname}-%{version}
+
+%if 0%{?fedora} && 0%{?fedora} <= 39
+# version_file is not supported in setuptools-scm 7.1.0
+sed -e 's/^version_file/write_to/' -i pyproject.toml
+%endif
 
 %generate_buildrequires
 %pyproject_buildrequires
