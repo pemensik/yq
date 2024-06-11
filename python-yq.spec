@@ -54,6 +54,10 @@ Requires:       jq
 %pyproject_install
 %pyproject_save_files %{srcname}
 
+# xq tool is already taken
+# Already packaged separately in https://github.com/sibprogrammer/xq
+mv %{buildroot}%{_bindir}/{xq,xqp}
+
 
 %check
 # python3 setup.py test is failing. Run test directly.
