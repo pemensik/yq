@@ -72,19 +72,33 @@ sed -e 's/^version_file/write_to/' -i pyproject.toml
 # xq tool is already taken
 # Already packaged separately in https://github.com/sibprogrammer/xq
 mv %{buildroot}%{_bindir}/{xq,xqp}
+# yq potentially conflicts with Go project
+mv %{buildroot}%{_bindir}/{yq,yqp}
+
+touch %{buildroot}%{_bindir}/yq
 
 
 %check
 # python3 setup.py test is failing. Run test directly.
 %{python3} test/test.py
 
+%postun -n python3-%{srcname}
+if [ $1 -eq 0 ] ; then
+  %{_bindir}/alternatives --remove yq %{_bindir}/yqp
+fi
+
+%post -n python3-%{srcname}
+%{_bindir}/alternatives --install %{_bindir}/yq \
+  yq %{_bindir}/yqp 10
+
 
 %files -n  python3-%{srcname} -f %{pyproject_files}
 %license LICENSE
 %doc README.rst
-%{_bindir}/%{srcname}
+%{_bindir}/yqp
 %{_bindir}/tomlq
 %{_bindir}/xqp
+%ghost %{_bindir}/yq
 
 
 %changelog
