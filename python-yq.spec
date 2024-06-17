@@ -42,13 +42,13 @@ Summary:        %{summary}
 %{?python_provide:%python_provide python3-%{srcname}}
 
 Requires:       jq
-Recommends:     python3-%{srcname}-compat
+Recommends:     python3-%{srcname}-alt
 
 %description -n python3-%{srcname}
 %{_description}
 
 
-%package -n python3-%{srcname}-compat
+%package -n python3-%{srcname}-alt
 Summary:          %{summary}
 
 Requires:         python3-%{srcname} = %{version}-%{release}
@@ -57,7 +57,7 @@ Requires(postun): %{_sbindir}/alternatives
 # Until Go yq provides alternatives, conflict with that package
 Conflicts:        yq
 
-%description -n python3-%{srcname}-compat
+%description -n python3-%{srcname}-alt
 %{_description}
 
 Alternative wrapper providing yq binary via alternatives.
@@ -101,12 +101,12 @@ touch %{buildroot}%{_bindir}/yq
 # python3 setup.py test is failing. Run test directly.
 %{python3} test/test.py
 
-%postun -n python3-%{srcname}-compat
+%postun -n python3-%{srcname}-alt
 if [ $1 -eq 0 ] ; then
   %{_sbindir}/alternatives --remove yq %{_bindir}/yqp
 fi
 
-%post -n python3-%{srcname}-compat
+%post -n python3-%{srcname}-alt
 %{_sbindir}/alternatives --install %{_bindir}/yq \
   yq %{_bindir}/yqp 10
 
@@ -119,7 +119,7 @@ fi
 %{_bindir}/xqp
 
 
-%files -n python3-%{srcname}-compat
+%files -n python3-%{srcname}-alt
 %ghost %{_bindir}/yq
 
 
