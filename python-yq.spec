@@ -1,4 +1,4 @@
-# OpenSUSE uses alternative Go based tool (rhbz#2276522):
+# Fedora and OpenSUSE has alternative Go based tool (rhbz#2276522):
 # https://github.com/mikefarah/yq
 
 %global srcname yq
@@ -23,8 +23,6 @@ BuildRequires:  jq
 BuildRequires:  sed
 %endif
 
-Requires(post): %{_bindir}/alternatives
-Requires(postun): %{_bindir}/alternatives
 
 %global _description %{expand:
 jq wrapper for YAML, XML, TOML documents.
@@ -44,9 +42,25 @@ Summary:        %{summary}
 %{?python_provide:%python_provide python3-%{srcname}}
 
 Requires:       jq
+Recommends:     python3-%{srcname}-compat
 
 %description -n python3-%{srcname}
 %{_description}
+
+
+%package -n python3-%{srcname}-compat
+Summary:          %{summary}
+
+Requires:         python3-%{srcname} = %{version}-%{release}
+Requires(post):   %{_sbindir}/alternatives
+Requires(postun): %{_sbindir}/alternatives
+# Until Go yq provides alternatives, conflict with that package
+Conflicts:        yq
+
+%description -n python3-%{srcname}-compat
+%{_description}
+
+Alternative wrapper providing yq binary via alternatives.
 
 
 %prep
@@ -72,10 +86,12 @@ sed -e 's/^version_file/#write_to/' -i pyproject.toml
 %pyproject_install
 %pyproject_save_files %{srcname}
 
-# xq tool is already taken
-# Already packaged separately in https://github.com/sibprogrammer/xq
+# xq command is already taken
+# Already packaged separately in xq package
+# https://github.com/sibprogrammer/xq = https://src.fedoraproject.org/rpms/xq
 mv %{buildroot}%{_bindir}/{xq,xqp}
-# yq potentially conflicts with Go project
+# yq conflicts with Go project
+# https://github.com/mikefarah/yq = https://src.fedoraproject.org/rpms/yq
 mv %{buildroot}%{_bindir}/{yq,yqp}
 
 touch %{buildroot}%{_bindir}/yq
@@ -85,13 +101,13 @@ touch %{buildroot}%{_bindir}/yq
 # python3 setup.py test is failing. Run test directly.
 %{python3} test/test.py
 
-%postun -n python3-%{srcname}
+%postun -n python3-%{srcname}-compat
 if [ $1 -eq 0 ] ; then
-  %{_bindir}/alternatives --remove yq %{_bindir}/yqp
+  %{_sbindir}/alternatives --remove yq %{_bindir}/yqp
 fi
 
-%post -n python3-%{srcname}
-%{_bindir}/alternatives --install %{_bindir}/yq \
+%post -n python3-%{srcname}-compat
+%{_sbindir}/alternatives --install %{_bindir}/yq \
   yq %{_bindir}/yqp 10
 
 
@@ -101,6 +117,9 @@ fi
 %{_bindir}/yqp
 %{_bindir}/tomlq
 %{_bindir}/xqp
+
+
+%files -n python3-%{srcname}-compat
 %ghost %{_bindir}/yq
 
 
