@@ -47,6 +47,7 @@ Recommends:     python3-%{srcname}-alt
 %description -n python3-%{srcname}
 %{_description}
 
+Provides yqp, xqp and tomlq commands and python yq module.
 
 %package -n python3-%{srcname}-alt
 Summary:          %{summary}
